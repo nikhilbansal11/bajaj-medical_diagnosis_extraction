@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provisional Diagnosis Tool</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 100px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        #error {
+            color: red;
+        }
+
+        #loading {
+            display: none;
+            font-size: 18px;
+            margin-top: 10px;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Image for Provisional Diagnosis</h1>
+
+        <form id="uploadForm">
+            <input type="file" id="imageInput" accept="image/*" required>
+            <!-- Changed type to "button" -->
+            <button type="button">Upload Image</button>
+        </form>
+
+        <div id="loading">Processing your image...</div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Frontend script to handle file upload and send it to the server
+
+        const form = document.getElementById('uploadForm');
+        const imageInput = document.getElementById('imageInput');
+        const resultDiv = document.getElementById('result');
+        const loadingDiv = document.getElementById('loading');
+        const button = document.querySelector('button'); // Select the button
+
+        // Handle button click instead of form submission
+        button.addEventListener('click', async () => {
+            if (!imageInput.files.length) {
+                alert('Please select an image!');
+                return;
+            }
+
+            // Show loading message
+            loadingDiv.style.display = 'block';
+            resultDiv.innerHTML = '';
+
+            const file = imageInput.files[0];
+            const formData = new FormData();
+            formData.append('image', file); // Append the image file to FormData
+
+            try {
+                // Send image to the backend API
+                const response = await fetch('http://localhost:3000/upload-image', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to process the image.');
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                // Display the result (diagnosis) in the result div
+                resultDiv.innerHTML = `<p>Diagnosis: <strong>processed</strong></p>`;
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<p id="error">Error: ${error.message}</p>`;
+            } finally {
+                // Hide loading message
+                loadingDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
