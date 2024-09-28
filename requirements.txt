@@ -1,0 +1,9 @@
+csv
+re
+pytesseract
+easyocr
+azure-mgmt-resource
+azure-ai-formrecognizer
+langchain_community
+ollama
+spacy
