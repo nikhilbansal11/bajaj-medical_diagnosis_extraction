@@ -5,9 +5,8 @@ from azure.core.credentials import AzureKeyCredential
 from azure.ai.formrecognizer import DocumentAnalysisClient
 
 # Load Azure Form Recognizer credentials
-AZURE_FORM_RECOGNIZER_ENDPOINT = os.getenv('AZURE_FORM_RECOGNIZER_ENDPOINT', 'https://xor-extraction-tool-azure-form-recognizer.cognitiveservices.azure.com')
-AZURE_FORM_RECOGNIZER_KEY = os.getenv('AZURE_FORM_RECOGNIZER_KEY', 'f18897bc0c8a4151bab4727dda1818c9')
-
+AZURE_FORM_RECOGNIZER_ENDPOINT = os.getenv('AZURE_FORM_RECOGNIZER_ENDPOINT')
+AZURE_FORM_RECOGNIZER_KEY = os.getenv('AZURE_FORM_RECOGNIZER_KEY')
 def analyze_document(file_path, endpoint, key):
     """
     Analyzes a document using Azure Form Recognizer.
